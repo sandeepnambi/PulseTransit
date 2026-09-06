@@ -100,11 +100,19 @@ export const TransitProvider = ({ children }) => {
 
   // Initialize Socket.io connection and listeners
   useEffect(() => {
-    const socketIo = io(SOCKET_URL, { transports: ['websocket', 'polling'] });
+    const socketIo = io(SOCKET_URL, {
+      transports: ['polling', 'websocket'],
+      reconnectionAttempts: 5,
+      timeout: 10000
+    });
     setSocket(socketIo);
 
     socketIo.on('connect', () => {
       console.log('[Socket.io Client] Connected to PulseTransit real-time backend');
+    });
+
+    socketIo.on('connect_error', () => {
+      // Quietly allow Socket.io auto-retry without unhandled browser console error dumps
     });
 
     socketIo.on('initial_state', (data) => {
@@ -159,6 +167,11 @@ export const TransitProvider = ({ children }) => {
       .catch((err) => console.log('REST buses fetch fallback:', err));
 
     return () => {
+      socketIo.off('connect');
+      socketIo.off('connect_error');
+      socketIo.off('initial_state');
+      socketIo.off('bus_location_update');
+      socketIo.off('emergency_sos_alert');
       socketIo.disconnect();
     };
   }, []);
