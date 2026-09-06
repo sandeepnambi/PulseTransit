@@ -20,13 +20,14 @@ let driverStore = [...DRIVERS];
 let telemetryStore = [];
 
 // Enable CORS & JSON Parsing
-app.use(cors({ origin: '*' }));
+const corsOrigin = process.env.CORS_ORIGIN || '*';
+app.use(cors({ origin: corsOrigin, credentials: true }));
 app.use(express.json());
 
 // Setup Socket.io Server
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: corsOrigin,
     methods: ['GET', 'POST']
   },
   transports: ['polling', 'websocket']

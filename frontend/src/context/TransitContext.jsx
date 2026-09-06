@@ -4,7 +4,8 @@ import { translations } from '../i18n/translations';
 
 const TransitContext = createContext();
 
-const SOCKET_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '/';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '';
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || (window.location.hostname === 'localhost' ? 'http://localhost:5000' : '/');
 
 export const TransitProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
@@ -32,7 +33,7 @@ export const TransitProvider = ({ children }) => {
   // Initialize Auth Check
   useEffect(() => {
     if (token) {
-      fetch('/api/auth/me', {
+      fetch(`${API_BASE_URL}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` }
       })
         .then((res) => res.json())
@@ -50,7 +51,7 @@ export const TransitProvider = ({ children }) => {
   // Login Handler
   const loginUser = async (email, password) => {
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -72,7 +73,7 @@ export const TransitProvider = ({ children }) => {
   // Register Handler
   const registerUser = async (userData) => {
     try {
-      const res = await fetch('/api/auth/register', {
+      const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData)
@@ -151,17 +152,17 @@ export const TransitProvider = ({ children }) => {
     });
 
     // Fetch initial REST fallback data
-    fetch('/api/routes')
+    fetch(`${API_BASE_URL}/api/routes`)
       .then((res) => res.json())
       .then((data) => data.success && setRoutes(data.data))
       .catch((err) => console.log('REST routes fetch fallback:', err));
 
-    fetch('/api/stops')
+    fetch(`${API_BASE_URL}/api/stops`)
       .then((res) => res.json())
       .then((data) => data.success && setStops(data.data))
       .catch((err) => console.log('REST stops fetch fallback:', err));
 
-    fetch('/api/buses')
+    fetch(`${API_BASE_URL}/api/buses`)
       .then((res) => res.json())
       .then((data) => data.success && setBuses(data.data))
       .catch((err) => console.log('REST buses fetch fallback:', err));
