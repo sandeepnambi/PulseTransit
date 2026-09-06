@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://pulsetransit-backend.onrender.com/api/$1"
+      "destination": "https://pulsetransit.onrender.com/api/$1"
     },
     {
       "source": "/socket.io/(.*)",
-      "destination": "https://pulsetransit-backend.onrender.com/socket.io/$1"
+      "destination": "https://pulsetransit.onrender.com/socket.io/$1"
     },
     {
       "source": "/(.*)",
