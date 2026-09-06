@@ -37,7 +37,7 @@ function MainAppLayout() {
 
           {/* Tab Views Full-Screen Overlay Panels */}
           {activeTab !== 'live-map' && (
-            <div className="absolute inset-0 z-20 bg-white p-4 md:p-6 overflow-y-auto border-l border-slate-200">
+            <div className="absolute inset-0 z-20 bg-white p-3 sm:p-6 pb-20 md:pb-6 overflow-y-auto border-l border-slate-200">
               {activeTab === 'trip-planner' && <TripPlanner />}
               {activeTab === 'saved-routes' && <SavedRoutes />}
               {activeTab === 'fleet-admin' && <FleetAdmin />}
